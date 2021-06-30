@@ -1,0 +1,21 @@
+from django.urls import path,include
+from .views import (
+    home_view,
+    BookRegister,
+    BookList,
+    BookDelete,
+)
+
+
+
+
+app_name = "library"
+
+urlpatterns = [
+    path('',home_view,name="home"),
+    #books
+    path('book_register/',BookRegister,name="book-register"),
+    path('book-list',BookList,name="book-list"),
+    path('<int:id>/', BookRegister,name='book-update'), # get and post req. for update operation
+    path('delete/<int:id>/',BookDelete,name='book-delete'),
+]

@@ -1,0 +1,55 @@
+{% extends 'account/base.html' %}
+{% block head_title %}
+Login
+{% endblock head_title %}
+{% block content %}
+
+
+<div class="container mt-4">
+	<div class="d-flex justify-content-center h-100">
+		<div class="card">
+			<div class="card-header">
+				<h3>Sign In</h3>
+				<div class="d-flex justify-content-end social_icon">
+					<span><i class="fab fa-facebook-square mr-2 text-primary"></i></span>
+					<span><i class="fab fa-google-plus-square mr-2 text-danger"></i></span>
+					<span><i class="fab fa-twitter-square text-primary"></i></span>
+				</div>
+			</div>
+			<div class="card-body">
+				<form method="POST">
+					{% csrf_token %}
+					<div class="input-group form-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="fas fa-user"></i></span>
+						</div>
+						<input type="text" class="form-control" name="username" placeholder="username">
+						
+					</div>
+					<div class="input-group form-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="fas fa-key"></i></span>
+						</div>
+						<input type="password" class="form-control" name="password" placeholder="password">
+					</div>
+					{% if data %}
+						<span style="color:red" class="text-center"> {{data}} </span>
+					{% endif %}
+					
+					<div class="form-group">
+						<input type="submit" value="Login" class="btn float-right btn-secondary">
+					</div>
+				</form>
+			</div>
+			<div class="card-footer">
+				<div class="d-flex justify-content-center links">
+					Don't have an account?<a href="{% url 'account:register' %}">Sign Up</a>
+				</div>
+				<div class="d-flex justify-content-center">
+					<a href="#">Forgot your password?</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock content %}

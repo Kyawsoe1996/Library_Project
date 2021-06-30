@@ -1,0 +1,88 @@
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        {% endfor %}
+    {% endif %}
+    </div>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Library App</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'account:home' %}">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><b>Books</b></a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="{% url 'library:book-register' %}">Register Books</a>
+          <a class="dropdown-item" href="{% url 'library:book-list' %}">View Books</a>
+          <a class="dropdown-item" href="#">Issue Books</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Separated link</a>
+        </div>
+      </li>
+
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><b>Fine Calculation</b></a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="#">Check Fine</a>
+          <a class="dropdown-item" href="#">Calculate Fine</a>
+          
+         
+        </div>
+      </li>
+     
+    </ul>
+
+
+
+
+    <form class="form-inline my-2 my-lg-0">
+      <ul class="navbar-nav mr-auto">
+      {% if request.user.is_authenticated %}
+        
+        <li class="nav-item active">
+        <a class="nav-link" href="{% url 'account:account-detail' %}">View Acc <span class="sr-only">(current)</span></a>
+      </li>
+       <li class="nav-item active">
+        <a class="nav-link" href="{% url 'account:change-password' %}">Change Password <span class="sr-only">(current)</span></a>
+      </li>
+        <li class="nav-item active">
+        <a class="nav-link" href="{% url 'account:logout' %}">Logout <span class="sr-only">(current)</span></a>
+      </li>
+      </li>
+        <li class="nav-item active">
+         <a class="nav-link" href="#">{{request.user}} <i class="fas fa-user"></i> <span class="sr-only">(current)</span></a>
+      </li>
+      {% else %}
+        <li class="nav-item active">
+        <a class="nav-link" href="{% url 'account:register' %}">Signup <span class="sr-only">(current)</span></a>
+      </li>
+      
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'account:login' %}">Login <span class="sr-only">(current)</span></a>
+      </li>
+      {% endif %}
+     
+   
+     
+      
+    
+
+     
+    </ul>
+
+    </form>
+  </div>
+</nav>

@@ -1,0 +1,61 @@
+{% extends 'account/base.html' %}
+{% load crispy_forms_tags %}
+{% block head_title %}
+Book Registration
+{% endblock head_title %}
+
+
+{% block content %}
+
+    <h1>Welcome to book lists</h1>
+    
+
+
+
+    <table id = "table" class = "table table-bordered">
+        <thead class = "alert-success">
+            <tr>
+                <th>No </th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>ISBN</th>
+                <th>Published Date</th>
+                <th>Author</th>
+                <th>Image</th>
+                <th>Operation</th>
+
+                
+                <!-- <th>Email</th>
+                <th>Address</th> -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for b in books %}
+
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{ b.name }}</td>
+                <td>{{ b.get_category_display }}</td>
+                <td>{{ b.isbn }}</td>
+                <td>{{b.published_date |date:"d-M-Y"}}</td>
+                <td>{{b.author.author_name}}</td>
+                <td> <img src="{{b.image.url}}" width="80px" alt="Generic placeholder image" class="img-fluid"></td>
+                <td><a href="{% url 'library:book-update' b.id %}">Edit</a> 
+                    <a href="{% url 'library:book-delete' b.id %}">Delete</a></td>
+                
+            </tr>
+           {% endfor %}
+        </tbody>
+    </table>
+        
+{% endblock content %}
+
+{% block extra_scripts %}
+<script type = "text/javascript">
+    $(document).ready(function(){
+        $('#table').DataTable();
+    });
+</script>
+
+
+{% endblock extra_scripts %}

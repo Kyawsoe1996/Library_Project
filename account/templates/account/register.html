@@ -1,0 +1,47 @@
+{% extends 'account/base.html' %}
+{% load crispy_forms_tags %}
+{% block head_title %}
+Register
+{% endblock head_title %}
+{% block content %}
+
+<div class="container mt-5">
+    <main class="my-form">
+        <div class="cotainer">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">Register</div>
+                            <div class="card-body">
+                                <form  method="POST">
+                                    {% csrf_token %}
+                                        <div class="row w-50 mx-auto" >
+                                        {{form.username|as_crispy_field}}
+                                        {{form.email|as_crispy_field}}
+                                        {{form.password|as_crispy_field}}
+                                        {{form.confirm_password|as_crispy_field}}
+                                        {{form.phone_number|as_crispy_field}}
+                                        {{form.present_address|as_crispy_field}}
+
+                                        <div class="col-md-4 offset-md-2">
+                                            <button type="submit" class="btn btn-primary">
+                                            Register
+                                            </button>
+                                        </div>
+
+                                        </div>
+
+                                        
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+</div>
+{% endblock content %}
+
