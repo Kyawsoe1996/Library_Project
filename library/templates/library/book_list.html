@@ -23,6 +23,7 @@ Book Registration
                 <th>Author</th>
                 <th>Image</th>
                 <th>Operation</th>
+                <th>Qty</th>
 
                 
                 <!-- <th>Email</th>
@@ -42,7 +43,7 @@ Book Registration
                 <td> <img src="{{b.image.url}}" width="80px" alt="Generic placeholder image" class="img-fluid"></td>
                 <td><a href="{% url 'library:book-update' b.id %}">Edit</a> 
                     <a href="{% url 'library:book-delete' b.id %}">Delete</a></td>
-                
+                <td>{{ b.stocks.all.0.quantity}}</td>
             </tr>
            {% endfor %}
         </tbody>

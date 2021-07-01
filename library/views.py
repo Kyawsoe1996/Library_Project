@@ -31,6 +31,7 @@ def BookRegister(request,id=0):
 
 def BookList(request):
    books = Book.objects.all()
+   
    context =  {
       "books":books
    }
