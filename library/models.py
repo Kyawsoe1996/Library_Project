@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from account.models import Account
+import datetime
 # Create your models here.
 
 CATEGORY = (
@@ -30,13 +31,14 @@ class Author(models.Model):
 
 class Book(models.Model):
     """Model definition for MODELNAME."""
-    name = models.CharField(max_length=300)
+    name = models.CharField(max_length=300,unique=True)
     category = models.CharField(choices=CATEGORY, max_length=2)
     published_date= models.DateField()
     isbn = models.CharField(max_length=50)
     author = models.ForeignKey(Author,
                              on_delete=models.CASCADE)
     image = models.ImageField()
+    borrow_expiray_days = models.IntegerField(blank=True,null=True)
     
 
 
@@ -77,27 +79,7 @@ def create_stock_when_create_book(sender, instance=None, created=False, **kwargs
         Stock.objects.create(book_id=instance)
 
 
-class Borrow(models.Model):
-    
 
-    user = models.ForeignKey(Account, related_name='accounts', on_delete=models.CASCADE)
-    books = models.ManyToManyField(Book)
-    borrow_date = models.DateTimeField(auto_now=True)
-    return_date = models.DateTimeField(blank=True,null=True)
-    borrow_status = models.BooleanField(default=False)
-    return_status = models.BooleanField(default=False)
-
-
-    
-    class Meta:
-        
-
-        verbose_name = 'Borrow'
-        verbose_name_plural = 'Borrows'
-
-    def __str__(self):
-       
-        return '%s' % (self.user)
 
 
 class BorrowBook(models.Model):
@@ -116,7 +98,47 @@ class BorrowBook(models.Model):
 
     def __str__(self):
        
-        return '%d of %s' % (self.qty, self.book_id.name)
+        return '%d of %s by  %s' % (self.qty, self.book_id.name,self.user)
+
+class Borrow(models.Model):
+    
+
+    user = models.ForeignKey(Account, related_name='accounts', on_delete=models.CASCADE)
+    books = models.ManyToManyField(BorrowBook)
+    borrow_date = models.DateField()
+    return_date = models.DateField(blank=True,null=True)
+    borrow_status = models.BooleanField(default=False)
+    return_status = models.BooleanField(default=False)
+
+
+    
+    class Meta:
+        
+
+        verbose_name = 'Borrow'
+        verbose_name_plural = 'Borrows'
+
+    def __str__(self):
+       
+        return '%s' % self.user
+
+    def calculate_expiray_date(self):
+        import pdb;pdb.set_trace()
+        for i in self.books.all():
+            days = i.book_id.borrow_expiray_days
+            adding_date = self.borrow_date + datetime.timedelta(days=days)
+            return_date = adding_date
+            return return_date
+        
+        
+        # days = self.book_id.borrow_expiray_days
+        # adding_date = self.borrow_date+ datetime.datetiem.timedelta(days=days)
+        # return_date = adding_date
+        # return return_date
+
+
+
+        
 
 
 

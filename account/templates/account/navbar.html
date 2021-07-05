@@ -26,9 +26,20 @@
         <div class="dropdown-menu">
           <a class="dropdown-item" href="{% url 'library:book-register' %}">Register Books</a>
           <a class="dropdown-item" href="{% url 'library:book-list' %}">View Books</a>
-          <a class="dropdown-item" href="#">Issue Books</a>
+          <a class="dropdown-item" href="{% url 'library:borrow-books' %}">Issue Books</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#">Separated link</a>
+        </div>
+      </li>
+
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><b>Student Issues</b></a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="{% url 'library:view-issue-book' %}">View Issued Book</a>
+         
+          
+         
         </div>
       </li>
 

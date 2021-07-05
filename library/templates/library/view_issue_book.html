@@ -1,0 +1,82 @@
+{% extends 'account/base.html' %}
+{% load crispy_forms_tags %}
+{% block head_title %}
+Book Registration
+{% endblock head_title %}
+
+
+{% block content %}
+<h1>View Issue Book Page</h1>
+
+
+
+{% for borrow_qs in borrow_qs_all  %}
+    
+
+    
+<h5 class="text-primary text-center">Date -------------- {{borrow_qs.borrow_date |date:"d-m-Y"}}</h5>  
+<table id = "table" class = "table table-bordered">
+    <thead class = "alert-success">
+        <tr>
+            <th>No </th>
+            <th>Student Name</th>
+            <th>Books</th>
+            <th>Qty</th>
+            <th>Borrow_date</th>
+            <th>Return Date</th>
+            <th>Is Borrow</th>
+            <th>Fine</th>
+            <!-- <th>Image</th>
+            <th>Operation</th>
+            <th>Qty</th> -->
+
+            
+            <!-- <th>Email</th>
+            <th>Address</th> -->
+        </tr>
+    </thead>
+    <tbody>
+       
+        
+        
+            
+        
+            
+       {% for borrow_book in borrow_qs.books.all  %}
+       <tr>
+           <td>{{forloop.counter}}</td>
+           <td>{{borrow_book.user.user.username}}</td>
+           <td>{{borrow_book.book_id.name}}</td>
+           <td>{{borrow_book.qty}}</td>
+           <td>{{borrow_book.borrow_set.all.0.borrow_date |date:"d-m-Y"}}</td>
+           <td>{{borrow_book.borrow_set.all.0.return_date |date:"d-m-Y"}}</td>
+           
+           <td class="text-center">
+           {% if borrow_book.borrow_status is True %}
+                    <input type="checkbox" checked disabled>
+               {% else %}
+               <input type="checkbox" disabled>
+           {% endif %}
+               </td>
+            <td></td>
+
+
+       </tr>
+       {% endfor %}
+    
+           
+        
+       
+    </tbody>
+</table>
+{% endfor %}
+{% endblock content %}
+    
+    
+
+
+{% block extra_scripts %}
+
+
+{% endblock extra_scripts %}
+    

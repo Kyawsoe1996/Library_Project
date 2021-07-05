@@ -4,6 +4,8 @@ from .views import (
     BookRegister,
     BookList,
     BookDelete,
+    BorrowBooks,
+    ViewIssueBook,
 )
 
 
@@ -18,4 +20,8 @@ urlpatterns = [
     path('book-list',BookList,name="book-list"),
     path('<int:id>/', BookRegister,name='book-update'), # get and post req. for update operation
     path('delete/<int:id>/',BookDelete,name='book-delete'),
+    path('borrow-book/',BorrowBooks,name="borrow-books"),
+
+    #Issue Book
+    path('view-issue-book/',ViewIssueBook.as_view(),name="view-issue-book")
 ]

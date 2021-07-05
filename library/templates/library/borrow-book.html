@@ -1,0 +1,40 @@
+{% extends 'account/base.html' %}
+{% load crispy_forms_tags %}
+{% block head_title %}
+Borrow Books
+{% endblock head_title %}
+
+
+{% block content %}
+<div class="container">
+    <div class="col-md-10 offset-md-1 mt-5">
+        <div class="jumbotron">
+            <h1 class="display-4">Issue Book</h1>
+            <p class="lead font-italic">Borrow Book For Student</p>
+            <hr class="my-4">
+            <form action="" method="post" autocomplete="off" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{form.as_p}}
+               
+                
+                <div class="row mt-4">
+                    <div class="col-md-8">
+                        <button type="submit" class="btn btn-success btn-block btn-lg"><i class="fas fa-database"></i>
+                            Book
+                                </button>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="#" class="btn btn-secondary btn-block btn-lg">
+                            <i class="fas fa-stream"></i> Back to  Books list
+                        </a>
+                    </div>
+                </div>
+                
+            
+            </form>
+        </div>
+    </div>
+</div>
+    
+    
+{% endblock content %}
