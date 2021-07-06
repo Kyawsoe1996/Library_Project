@@ -17,13 +17,13 @@ Book Registration
 <h5 class="text-primary text-center">Date -------------- {{borrow_qs.borrow_date |date:"d-m-Y"}}</h5>  
 <table id = "table" class = "table table-bordered">
     <thead class = "alert-success">
-        <tr>
+        <tr class="text-center">
             <th>No </th>
             <th>Student Name</th>
             <th>Books</th>
             <th>Qty</th>
             <th>Borrow_date</th>
-            <th>Return Date</th>
+            <th>Returning Schedule</th>
             <th>Is Borrow</th>
             <th>Fine</th>
             <!-- <th>Image</th>
@@ -43,22 +43,22 @@ Book Registration
         
             
        {% for borrow_book in borrow_qs.books.all  %}
-       <tr>
+       <tr class="text-center">
            <td>{{forloop.counter}}</td>
            <td>{{borrow_book.user.user.username}}</td>
            <td>{{borrow_book.book_id.name}}</td>
            <td>{{borrow_book.qty}}</td>
            <td>{{borrow_book.borrow_set.all.0.borrow_date |date:"d-m-Y"}}</td>
-           <td>{{borrow_book.borrow_set.all.0.return_date |date:"d-m-Y"}}</td>
+           <td class="text-center">{{borrow_book.return_date |date:"d-m-Y"}}</td>
            
            <td class="text-center">
            {% if borrow_book.borrow_status is True %}
-                    <input type="checkbox" checked disabled>
+                    <input type="checkbox" checked >
                {% else %}
                <input type="checkbox" disabled>
            {% endif %}
                </td>
-            <td></td>
+            <td>{{borrow_book.borrow_set.all.0.calculate_fine}}</td>
 
 
        </tr>

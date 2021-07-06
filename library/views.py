@@ -100,10 +100,12 @@ def BorrowBooks(request):
             borrow_one_obj = Borrow.objects.get(id=borrow.id)
             for data in borrow_one_obj.books.all():
                data.borrow_status = True
+               data.return_date = borrow_one_obj.borrow_date + datetime.timedelta(days=data.book_id.book_expiry_days)
                data.save()
-            calculate_date=borrow.calculate_expiray_date()
-            borrow.return_date  = calculate_date
-            borrow.save()
+               data.save()
+            # calculate_date=borrow.calculate_expiray_date()
+            # borrow.return_date  = calculate_date
+            # borrow.save()
             
 
 
@@ -117,12 +119,14 @@ def BorrowBooks(request):
                borrow.books.add(bor.id)
             
             borrow_one_obj = Borrow.objects.get(id=borrow.id)
+            
             for data in borrow_one_obj.books.all():
                data.borrow_status = True
+               data.return_date = borrow_one_obj.borrow_date + datetime.timedelta(days=data.book_id.book_expiry_days)
                data.save()
-            calculate_date=borrow.calculate_expiray_date()
-            borrow.return_date  = calculate_date
-            borrow.save()
+            # calculate_date=borrow.calculate_expiray_date()
+            # borrow.return_date  = calculate_date
+            # borrow.save()
 
 
          # for b in books:
@@ -200,8 +204,20 @@ class ViewIssueBook(View):
       #      'user':user,
       #      'borrow_book_obj':book_lists
       #   }
+     
 
-      #by_date
+     
+       #calculate_fine
+      # fine_lists = []
+      
+      # for borrow_qs in borrow_qs_all:
+      #    fine = Borrow.objects.filter(return_date__lt = borrow_qs.borrow_date)
+      # fine_lists.append(fine)
+      # for f in fine_lists:
+      #    print('500')
+      # print(fine_lists)
+
+       #by_date
       context ={
          "borrow_qs_all":borrow_qs_all
       }

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Book,Author,Stock,Borrow,BorrowBook
+from .models import Book,Author,Stock,Borrow,BorrowBook,Config
 # Register your models here.
 
 # admin.site.register(Book)
@@ -68,6 +68,18 @@ class BorrowBookAdmin(admin.ModelAdmin):
     ]
 
 admin.site.register(BorrowBook, BorrowBookAdmin)
+
+
+class ConfigAdmin(admin.ModelAdmin):
+    list_display = [
+        'name',
+        'books_fine',
+        'books_expiry_days',
+        'books_lost',
+    ]
+
+admin.site.register(Config, ConfigAdmin)
+
 
 
 

@@ -28,6 +28,23 @@ class Author(models.Model):
     def __str__(self):
        return self.author_name
 
+class Config(models.Model):
+    name = models.CharField(max_length=150)
+    books_fine = models.IntegerField()
+    books_expiry_days = models.IntegerField()
+    books_lost = models.IntegerField()
+    
+
+    class Meta:
+        
+
+        verbose_name = 'Config'
+        verbose_name_plural = 'Configs'
+
+    def __str__(self):
+        
+        return self.name
+
 
 class Book(models.Model):
     """Model definition for MODELNAME."""
@@ -38,7 +55,9 @@ class Book(models.Model):
     author = models.ForeignKey(Author,
                              on_delete=models.CASCADE)
     image = models.ImageField()
-    borrow_expiray_days = models.IntegerField(blank=True,null=True)
+    book_expiry_days = models.IntegerField()
+    book_fine = models.IntegerField()
+    
     
 
 
@@ -89,6 +108,7 @@ class BorrowBook(models.Model):
     qty = models.IntegerField(default=1)
     user = models.ForeignKey(Account,on_delete=models.CASCADE)
     borrow_status = models.BooleanField(default=False)
+    return_date = models.DateField(blank=True,null=True)
 
     class Meta:
        
@@ -99,6 +119,7 @@ class BorrowBook(models.Model):
     def __str__(self):
        
         return '%d of %s by  %s' % (self.qty, self.book_id.name,self.user)
+
 
 class Borrow(models.Model):
     
@@ -121,22 +142,55 @@ class Borrow(models.Model):
     def __str__(self):
        
         return '%s' % self.user
-
-    def calculate_expiray_date(self):
-        import pdb;pdb.set_trace()
-        for i in self.books.all():
-            days = i.book_id.borrow_expiray_days
-            adding_date = self.borrow_date + datetime.timedelta(days=days)
-            return_date = adding_date
-            return return_date
+    
+    # def calculate_expiray_date(self):
+    #     for i in self.books.all():
+    #         config = Config.objects.all()[0]
+    #         if config:
+    #             adding_date = self.borrow_date + datetime.timedelta(days=config.books_expiry_days)
+    #         else:
+    #             adding_date = self.borrow_date + datetime.timedelta(days=10)
+    #         return_date = adding_date
+    #         return return_date
+    
+    def calculate_fine(self):
         
         
-        # days = self.book_id.borrow_expiray_days
-        # adding_date = self.borrow_date+ datetime.datetiem.timedelta(days=days)
-        # return_date = adding_date
-        # return return_date
+        # print(self.return_date)
+        today = datetime.date.today()
+        for data in self.books.all():
+            if data.return_date < today:
+                #getting timedelta
+                days = today - data.return_date
+                #get the day difference in integer
+                days = days.days
+                return days * data.book_id.book_fine
+            else:
+                return ''
 
 
+        
+        # if self.return_date < today:
+        #     #getting timedelta
+        #     days = today - self.return_date
+        #     #get the days difference in integer
+        #     days = days.days
+        #     config = Config.objects.all()[0]
+        #     if config:
+
+        #         return days * config.books_fine
+        #     else:
+        #         return days * 1000
+        # else:
+        #     return ''
+
+
+
+
+        
+        
+        
+        
 
         
 
