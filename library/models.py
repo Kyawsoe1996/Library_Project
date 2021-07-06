@@ -120,6 +120,19 @@ class BorrowBook(models.Model):
        
         return '%d of %s by  %s' % (self.qty, self.book_id.name,self.user)
 
+    def calculate_fine_by_each(self):
+        today = datetime.date.today()
+        if self.return_date < today:
+            days = today - self.return_date
+            days = days.days
+            return days * self.book_id.book_fine
+        else:
+            return ''
+    
+    
+    
+
+
 
 class Borrow(models.Model):
     
@@ -153,36 +166,8 @@ class Borrow(models.Model):
     #         return_date = adding_date
     #         return return_date
     
-    def calculate_fine(self):
-        
-        
-        # print(self.return_date)
-        today = datetime.date.today()
-        for data in self.books.all():
-            if data.return_date < today:
-                #getting timedelta
-                days = today - data.return_date
-                #get the day difference in integer
-                days = days.days
-                return days * data.book_id.book_fine
-            else:
-                return ''
+   
 
-
-        
-        # if self.return_date < today:
-        #     #getting timedelta
-        #     days = today - self.return_date
-        #     #get the days difference in integer
-        #     days = days.days
-        #     config = Config.objects.all()[0]
-        #     if config:
-
-        #         return days * config.books_fine
-        #     else:
-        #         return days * 1000
-        # else:
-        #     return ''
 
 
 

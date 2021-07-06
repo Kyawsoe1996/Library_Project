@@ -58,7 +58,7 @@ Book Registration
                <input type="checkbox" disabled>
            {% endif %}
                </td>
-            <td>{{borrow_book.borrow_set.all.0.calculate_fine}}</td>
+            <td>{{borrow_book.calculate_fine_by_each}}</td>
 
 
        </tr>
