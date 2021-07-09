@@ -59,22 +59,25 @@ def BookDelete(request,id):
 #4. Adding return date on borrow book obj
 #5 Adding borrow_status true in borrow_book obj
 def overall_method(borrow_book_lists,user,borrow_date):
-
-    today = datetime.datetime.today()
-    borrow = Borrow.objects.create(user=user,borrow_date=borrow_date,borrow_status=True)
-    print(borrow.books.all(),'#############',borrow.id)
-    
-    for bor in borrow_book_lists:
-        borrow.books.add(bor.id)
-    borrow_one_obj = Borrow.objects.get(id=borrow.id)
-    for data in borrow_one_obj.books.all():
-        #adding_stock_quantity minus after borrowed for the specific book
-        stock = Stock.objects.get(book_id=data.book_id)
-        stock.avail_qty -= 1
-        stock.save()
-        data.borrow_status = True
-        data.return_date = borrow_one_obj.borrow_date + datetime.timedelta(days=data.book_id.book_expiry_days)
-        data.save()
+   """
+      Create Borrow Objects Add books to Borrowbook and 
+      update status of BB... and book stock  quantity reduce
+   """
+   today = datetime.datetime.today()
+   borrow = Borrow.objects.create(user=user,borrow_date=borrow_date,borrow_status=True)
+   print(borrow.books.all(),'#############',borrow.id)
+   
+   for bor in borrow_book_lists:
+      borrow.books.add(bor.id)
+   borrow_one_obj = Borrow.objects.get(id=borrow.id)
+   for data in borrow_one_obj.books.all():
+      #adding_stock_quantity minus after borrowed for the specific book
+      stock = Stock.objects.get(book_id=data.book_id)
+      stock.avail_qty -= 1
+      stock.save()
+      data.borrow_status = True
+      data.return_date = borrow_one_obj.borrow_date + datetime.timedelta(days=data.book_id.book_expiry_days)
+      data.save()
 
 
 
@@ -95,6 +98,14 @@ def BorrowBooks(request):
          print(datetime.datetime.today())
 
 
+         # checking first for the availabe book qty
+         import pdb;pdb.set_trace()
+         for book in books:
+            if book.stocks.all()[0].avail_qty <= 0:
+               messages.info(request,"You don't have enough %s book in stock...Pls add to stock" % book.name )
+               return redirect("library:borrow-books") 
+         
+            
          
          book_lists = [book.id for book in books]
          borrow_book_lists = []
@@ -129,13 +140,7 @@ def BorrowBooks(request):
          else:
             #newly created borrow objects.
             overall_method(borrow_book_lists,user,borrow_date)
-            
-         
 
-
-
-         
-         
          
          return redirect("library:book-list")
 
