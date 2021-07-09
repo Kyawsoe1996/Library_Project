@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.views.generic import ListView, DetailView, View
 from django.http import HttpResponse,JsonResponse,HttpResponseRedirect
 from .form import BookForm,BorrowForm
-from .models import Book,BorrowBook,Borrow
+from .models import Book,BorrowBook,Borrow,Stock
 import datetime
 from account.models import Account
 # Create your views here.
@@ -49,6 +49,35 @@ def BookDelete(request,id):
    return redirect("library:book-list")
 
 
+
+
+
+#code become duplicate, thats why making resuable
+#1. Creating borrow object,
+#2. Inside the borrow obj, adding borrow book list
+#3. After borrow, adding the stock quantity of the books  minus---1
+#4. Adding return date on borrow book obj
+#5 Adding borrow_status true in borrow_book obj
+def overall_method(borrow_book_lists,user,borrow_date):
+
+    today = datetime.datetime.today()
+    borrow = Borrow.objects.create(user=user,borrow_date=borrow_date,borrow_status=True)
+    print(borrow.books.all(),'#############',borrow.id)
+    
+    for bor in borrow_book_lists:
+        borrow.books.add(bor.id)
+    borrow_one_obj = Borrow.objects.get(id=borrow.id)
+    for data in borrow_one_obj.books.all():
+        #adding_stock_quantity minus after borrowed for the specific book
+        stock = Stock.objects.get(book_id=data.book_id)
+        stock.avail_qty -= 1
+        stock.save()
+        data.borrow_status = True
+        data.return_date = borrow_one_obj.borrow_date + datetime.timedelta(days=data.book_id.book_expiry_days)
+        data.save()
+
+
+
 # Borrow Book
 def BorrowBooks(request):
    if request.method == "GET":
@@ -64,6 +93,8 @@ def BorrowBooks(request):
          books = form.cleaned_data.get("books")
          borrow_date = form.cleaned_data.get("borrow_date")
          print(datetime.datetime.today())
+
+
          
          book_lists = [book.id for book in books]
          borrow_book_lists = []
@@ -81,6 +112,7 @@ def BorrowBooks(request):
 
          borrow_qs_all = Borrow.objects.filter(user=user,borrow_status=True)
          if borrow_qs_all.exists():
+            #checking the duplicate borrow books
             for borrow_qs in borrow_qs_all:
             
                for i in BorrowBook.objects.filter(user=user,borrow_status=True):
@@ -90,85 +122,14 @@ def BorrowBooks(request):
                         if data in borrow_qs.books.all():
                            messages.info(request," Book -  %s  already booked" %data.book_id.name)
                            return redirect("library:book-list")
-            
-            today = datetime.datetime.today()
-            borrow = Borrow.objects.create(user=user,borrow_date=borrow_date,borrow_status=True)
-            print(borrow.books.all(),'#############',borrow.id)
-            
-            for bor in borrow_book_lists:
-               borrow.books.add(bor.id)
-            borrow_one_obj = Borrow.objects.get(id=borrow.id)
-            for data in borrow_one_obj.books.all():
-               data.borrow_status = True
-               data.return_date = borrow_one_obj.borrow_date + datetime.timedelta(days=data.book_id.book_expiry_days)
-               data.save()
-               data.save()
-            # calculate_date=borrow.calculate_expiray_date()
-            # borrow.return_date  = calculate_date
-            # borrow.save()
-            
 
-
+            #if there is no duplicate book,  then create another borrow_obj
+            overall_method(borrow_book_lists,user,borrow_date)
 
          else:
-            today = datetime.datetime.today()
-            borrow = Borrow.objects.create(user=user,borrow_date=borrow_date,borrow_status=True)
+            #newly created borrow objects.
+            overall_method(borrow_book_lists,user,borrow_date)
             
-            
-            for bor in borrow_book_lists:
-               borrow.books.add(bor.id)
-            
-            borrow_one_obj = Borrow.objects.get(id=borrow.id)
-            
-            for data in borrow_one_obj.books.all():
-               data.borrow_status = True
-               data.return_date = borrow_one_obj.borrow_date + datetime.timedelta(days=data.book_id.book_expiry_days)
-               data.save()
-            # calculate_date=borrow.calculate_expiray_date()
-            # borrow.return_date  = calculate_date
-            # borrow.save()
-
-
-         # for b in books:
-            
-         #    book = get_object_or_404(Book, id=b.id)
-           
-            
-               
-         #    borrow_book, created = BorrowBook.objects.get_or_create(
-         #    book_id=book,
-         #    user=user,
-         #    borrow_status=False)
-
-         #    # order that has not been completed
-         #    # g = Borrow.objects.filter(user=user,borrow_status=True)
-            
-
-         #    borrow_qs = Borrow.objects.filter(user=user,borrow_status=True)
-         #    if borrow_qs.exists():
-         #       borrow_qs = borrow_qs[0]
-         #       # for i in borrow_qs.books.all():
-         #       #    if i == borrow_book:
-         #       if borrow_book in borrow_qs.books.all():
-         #             messages.info(request, " Book -  %s  already booked" %b.name)
-         #       else:
-         #          today = datetime.datetime.today()
-         #          borrow = Borrow.objects.create(user=user,borrow_date=today,
-         #                   borrow_status=True)
-         #          borrow.books.add(borrow_book)
-
-                  
-                     
-
-                        
-
-         #    else:
-         #       today = datetime.datetime.today()
-         #       borrow = Borrow.objects.create(user=user,borrow_date=today,
-         #                   borrow_status=True)
-         #       borrow.books.add(borrow_book)
-         
-         
          
 
 
@@ -178,12 +139,7 @@ def BorrowBooks(request):
          
          return redirect("library:book-list")
 
-# def ViewIssueBook(request):
-#    user = request.user
-#    context = {
-#       'user':user
-#    }
-#    return render(request,'library/view_issue_book.html',context)
+
 
 class ViewIssueBook(View):
    def get(self, request, *args, **kwargs):
@@ -191,42 +147,10 @@ class ViewIssueBook(View):
       user = self.request.user
       account = Account.objects.get(user=user)
       borrow_qs_all = Borrow.objects.filter(user=account,borrow_status=True).order_by('borrow_date')
-      
-      #overall_borrow_display
-      # book_lists = []
-      # for borrow_qs in borrow_qs_all:
-      #   for i in borrow_qs.books.all():
-      #      book_lists.append(i)
-
-      # print(book_lists,'################')
-      
-      # context = {
-      #      'user':user,
-      #      'borrow_book_obj':book_lists
-      #   }
-     
-
-     
-       #calculate_fine
-      # fine_lists = []
-      
-      # for borrow_qs in borrow_qs_all:
-      #    fine = Borrow.objects.filter(return_date__lt = borrow_qs.borrow_date)
-      # fine_lists.append(fine)
-      # for f in fine_lists:
-      #    print('500')
-      # print(fine_lists)
-
        #by_date
       context ={
          "borrow_qs_all":borrow_qs_all
       }
-
-
-
-
-      
-      
 
       return render(self.request,'library/view_issue_book.html',context)
         
@@ -244,6 +168,12 @@ def ReturnBook(request,id):
    borrow_book_obj.save()
    
    print(borrow_book_obj)
+   #for stock increment after book return
+   stock = Stock.objects.get(book_id=borrow_book_obj.book_id)
+   
+   stock.avail_qty += 1
+   stock.save()
+
    
    borrow_obj =  Borrow.objects.get(id=borrow_book_obj.borrow_set.all()[0].id)
    tup_list  =[]

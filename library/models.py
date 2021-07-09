@@ -79,6 +79,7 @@ class Stock(models.Model):
 
     book_id = models.ForeignKey(Book,related_name="stocks",on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
+    avail_qty = models.IntegerField()
 
     class Meta:
         """Meta definition for Stock."""

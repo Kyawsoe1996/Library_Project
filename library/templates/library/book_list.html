@@ -23,7 +23,8 @@ Book Registration
                 <th>Author</th>
                 <th>Image</th>
                 <th>Operation</th>
-                <th>Qty</th>
+                <th>On Hand Qty</th>
+                <th>Aval Qty</th>
 
                 
                 <!-- <th>Email</th>
@@ -44,6 +45,7 @@ Book Registration
                 <td><a href="{% url 'library:book-update' b.id %}">Edit</a> 
                     <a href="{% url 'library:book-delete' b.id %}">Delete</a></td>
                 <td>{{ b.stocks.all.0.quantity}}</td>
+                <td>{{b.stocks.all.0.avail_qty}}</td>
             </tr>
            {% endfor %}
         </tbody>
