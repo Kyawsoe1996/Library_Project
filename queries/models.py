@@ -28,3 +28,22 @@ class Entry(models.Model):
 
     def __str__(self):
         return self.headline
+
+
+#Working with model form set
+
+class Article(models.Model):
+    
+    title = models.CharField(max_length = 100)
+    pub_date = models.DateField()
+    # TODO: Define fields here
+
+    class Meta:
+        
+
+        verbose_name = 'Article'
+        verbose_name_plural = 'Articles'
+
+    def __str__(self):
+        
+        return self.title

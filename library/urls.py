@@ -6,6 +6,7 @@ from .views import (
     BookDelete,
     BorrowBooks,
     ViewIssueBook,
+    ReturnBook,
 )
 
 
@@ -23,5 +24,8 @@ urlpatterns = [
     path('borrow-book/',BorrowBooks,name="borrow-books"),
 
     #Issue Book
-    path('view-issue-book/',ViewIssueBook.as_view(),name="view-issue-book")
+    path('view-issue-book/',ViewIssueBook.as_view(),name="view-issue-book"),
+
+    #Return Book
+    path('return-book/<int:id>/',ReturnBook,name="return-book")
 ]

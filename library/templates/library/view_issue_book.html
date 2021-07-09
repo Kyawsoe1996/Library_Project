@@ -25,7 +25,9 @@ Book Registration
             <th>Borrow_date</th>
             <th>Returning Schedule</th>
             <th>Is Borrow</th>
+            <th>Is Return</th>
             <th>Fine</th>
+            <th>Actions</th>
             <!-- <th>Image</th>
             <th>Operation</th>
             <th>Qty</th> -->
@@ -58,7 +60,25 @@ Book Registration
                <input type="checkbox" disabled>
            {% endif %}
                </td>
+            <td>
+                {% if borrow_book.return_status is True %}
+                    <input type="checkbox" checked >
+                {% else %}
+               <input type="checkbox" disabled>
+                {% endif %}
+            </td>
             <td>{{borrow_book.calculate_fine_by_each}}</td>
+            <td>
+                
+                {% if borrow_book.return_status is True %}
+                    Already Returned
+                {% else %}
+                <a href="{% url 'library:return-book' borrow_book.id %}" 
+                class="btn btn-primary">Return</a>
+                {% endif %}
+                    
+                
+            </td>
 
 
        </tr>

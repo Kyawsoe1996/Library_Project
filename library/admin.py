@@ -53,6 +53,7 @@ class BorrowBookAdmin(admin.ModelAdmin):
         'qty',
         'user',
         'borrow_status',
+        'return_status'
     ]
     list_filter = [
         'book_id',

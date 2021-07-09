@@ -109,6 +109,7 @@ class BorrowBook(models.Model):
     user = models.ForeignKey(Account,on_delete=models.CASCADE)
     borrow_status = models.BooleanField(default=False)
     return_date = models.DateField(blank=True,null=True)
+    return_status = models.BooleanField(default=False)
 
     class Meta:
        

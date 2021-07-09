@@ -73,7 +73,7 @@ def BorrowBooks(request):
                pass
             else:
                borrow_book,created = BorrowBook.objects.get_or_create(
-                                    book_id=book,user=user,borrow_status=False
+                                    book_id=book,user=user,borrow_status=False,return_status=False
                                     )
                borrow_book_lists.append(borrow_book)
          # print(book_lists)
@@ -233,3 +233,38 @@ class ViewIssueBook(View):
 
    def post(self, request, *args, **kwargs):
       return HttpResponse('POST request!')
+
+
+
+def ReturnBook(request,id):
+   print(id,'########')
+   borrow_book_obj = BorrowBook.objects.get(id=id)
+   borrow_book_obj.return_status = True
+   borrow_book_obj.borrow_status  = False
+   borrow_book_obj.save()
+   
+   print(borrow_book_obj)
+   
+   borrow_obj =  Borrow.objects.get(id=borrow_book_obj.borrow_set.all()[0].id)
+   tup_list  =[]
+   for borrow_book_obj in borrow_obj.books.all():
+      status = borrow_book_obj.return_status
+      tup_list.append(status)
+     
+  #print(tuple(tup_list), "TUP TUP TUP TUP")
+   return_status_lists = []
+   return_status_lists.append(tuple(tup_list))
+ 
+   all_return_inside_borrow_obj = [ all(val == True for val in tup) for tup in return_status_lists]
+   if all_return_inside_borrow_obj[0]  == True:
+      print("All books in the borrow object are returned")
+      borrow_obj.return_status = True
+      borrow_obj.borrow_status = False
+      borrow_obj.save()
+   else:
+      print("Still Remaining")
+
+
+   
+   return redirect("library:view-issue-book")
+         
