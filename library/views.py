@@ -99,7 +99,6 @@ def BorrowBooks(request):
 
 
          # checking first for the availabe book qty
-         import pdb;pdb.set_trace()
          for book in books:
             if book.stocks.all()[0].avail_qty <= 0:
                messages.info(request,"You don't have enough %s book in stock...Pls add to stock" % book.name )
