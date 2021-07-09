@@ -46,7 +46,8 @@ class BookForm(ModelForm):
         # self.fields['name'].widget.attrs.update({'class': 'form-control'})
         
 
-
+class DateInput(forms.DateInput):
+    input_type = 'date'
 
 class BorrowForm(forms.ModelForm):
     
@@ -56,17 +57,31 @@ class BorrowForm(forms.ModelForm):
 
         model = Borrow
         exclude = ["return_date","borrow_status","return_status"]
+
+        #This is first way using widget, Note format should be Y-m-d, d-m-Y don't work i try...
         widgets = {
-        'borrow_date': forms.DateInput(format=('%m/%d/%Y'), attrs={'placeholder':'Select a date', 'type':'date'}),
+        'borrow_date': forms.DateInput(format=('%Y-%m-%d'),attrs={'placeholder':'Select a date', 'type':'date'})
             }
+       
+
 
     def __init__(self, *args, **kwargs):
         super(BorrowForm,self).__init__(*args, **kwargs)
         self.fields['user'].empty_label = "Select Student"
+        
+        
 
         for i in self.fields:
             self.fields[i].widget.attrs.update({'class':'form-control'})
+
         
+        # self.fields["borrow_date"] = forms.DateField(widget=DateInput(format=('%Y-%m-%d'),attrs={'class':'form-control'}), initial=datetime.date.today())
+        
+        #firstway of adding with widget and add initial here, default date field in view,
+        self.fields["borrow_date"].initial = datetime.date.today()
+        
+        
+
         self.fields["books"].widget = forms.widgets.CheckboxSelectMultiple()
         # self.fields["books"].help_text = ""
         self.fields["books"].queryset = Book.objects.all()
