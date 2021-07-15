@@ -186,7 +186,7 @@ class CounterBaseOTPView(View):
         return render(self.request,"account/otp_view.html",context)
 
     def post(self, request, *args, **kwargs):
-        import pdb;pdb.set_trace()
+        
         phone = kwargs.get('phone')
         try:
             acc = Account.objects.get(phone_number=phone)

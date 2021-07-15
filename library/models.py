@@ -55,8 +55,8 @@ class Book(models.Model):
     author = models.ForeignKey(Author,
                              on_delete=models.CASCADE)
     image = models.ImageField()
-    book_expiry_days = models.IntegerField()
-    book_fine = models.IntegerField()
+    book_expiry_days = models.IntegerField(blank=True,null=True)
+    book_fine = models.IntegerField(blank=True,null=True)
     
     
 
@@ -79,7 +79,7 @@ class Stock(models.Model):
 
     book_id = models.ForeignKey(Book,related_name="stocks",on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
-    avail_qty = models.IntegerField()
+    avail_qty = models.IntegerField(default=1)
 
     class Meta:
         """Meta definition for Stock."""
