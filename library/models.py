@@ -55,8 +55,8 @@ class Book(models.Model):
     author = models.ForeignKey(Author,
                              on_delete=models.CASCADE)
     image = models.ImageField()
-    book_expiry_days = models.IntegerField(blank=True,null=True)
-    book_fine = models.IntegerField(blank=True,null=True)
+    book_expiry_days = models.IntegerField(default=5)
+    book_fine = models.IntegerField(default=500)
     
     
 
