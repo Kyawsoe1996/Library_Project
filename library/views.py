@@ -147,7 +147,10 @@ def BorrowBooks(request):
 
 class ViewIssueBook(View):
    def get(self, request, *args, **kwargs):
-      
+      #authentication check for non-login users
+      if self.request.user.username == '':
+         messages.info(self.request, "You need to login")
+         return redirect("account:login")
       user = self.request.user
       account = Account.objects.get(user=user)
       borrow_qs_all = Borrow.objects.filter(user=account,borrow_status=True).order_by('borrow_date')
