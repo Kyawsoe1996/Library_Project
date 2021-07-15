@@ -47,3 +47,38 @@ class Article(models.Model):
     def __str__(self):
         
         return self.title
+
+
+
+#Checking with the INline formset factory
+
+class Customer(models.Model):
+    
+    name = models.CharField(max_length=25)
+    def __str__(self):
+        return self.name
+
+
+class Item(models.Model):
+    
+    name = models.CharField(max_length = 25)
+
+    def __str__(self):
+        return self.name
+
+class Order(models.Model):
+    
+    customer = models.ForeignKey(Customer,on_delete=models.CASCADE)
+    item = models.ForeignKey(Item,on_delete=models.CASCADE)
+    qty = models.IntegerField(default=1)
+    description = models.TextField()
+
+
+    def __str__(self):
+        return self.customer.name
+
+    # def __unicode__(self):
+    #     return 
+
+
+    
