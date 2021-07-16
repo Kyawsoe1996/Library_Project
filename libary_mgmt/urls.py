@@ -23,7 +23,7 @@ urlpatterns = [
     #account
     path('account/',include('account.urls',namespace="account")),
 
-    #Api
+    #Account_Api
     path('api/account/',include('account.api.urls','account_api')),
 
     #libaray
@@ -31,6 +31,9 @@ urlpatterns = [
 
     #queries_app
     path('',include('queries.urls',namespace="queries")),
+
+    #library_api
+    path('api/library/',include('library.api.urls','library_api')),
 ]
 
 if settings.DEBUG:
