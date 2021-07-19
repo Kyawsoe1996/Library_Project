@@ -19,7 +19,7 @@ import base64
 
 @login_required
 def home(request):
-    return render(request,"account/index.html")
+    return redirect("library:book-list")
 
 def logout_fn(request):
     logout(request)

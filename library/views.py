@@ -13,7 +13,8 @@ from django.contrib.auth.decorators import login_required
 
 
 def home_view(request):
-   return render(request,"library/admin_view.html")
+
+   return redirect("library:book-list")
 
 def BookRegister(request,id=0):
    if request.method == 'GET':
