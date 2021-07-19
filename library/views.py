@@ -7,6 +7,8 @@ from .form import BookForm,BorrowForm
 from .models import Book,BorrowBook,Borrow,Stock
 import datetime
 from account.models import Account
+from django.contrib.auth.decorators import login_required
+
 # Create your views here.
 
 

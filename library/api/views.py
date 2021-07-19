@@ -29,11 +29,12 @@ from rest_framework.pagination import PageNumberPagination,LimitOffsetPagination
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 
-from library.models import Book,Author,Stock
+from library.models import Book,Author,Stock,Borrow
 from .serializers import (
     AuthorSerializer,
     BookSerializer,
     StockSerializer,
+    BorrowSerializer,
 )
 
 
@@ -58,5 +59,12 @@ class StockViewSet(viewsets.ModelViewSet):
 
     queryset = Stock.objects.all()
     serializer_class = StockSerializer
+
+
+
+class BorrowViewSet(viewsets.ModelViewSet):
+
+    queryset = Borrow.objects.all()
+    serializer_class = BorrowSerializer
 
 

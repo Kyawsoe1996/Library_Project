@@ -24,9 +24,19 @@
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><b>Books</b></a>
         <div class="dropdown-menu">
-          <a class="dropdown-item" href="{% url 'library:book-register' %}">Register Books</a>
+          
+          {% if  request.user.is_staff %}
           <a class="dropdown-item" href="{% url 'library:book-list' %}">View Books</a>
+          <a class="dropdown-item" href="{% url 'library:book-register' %}">Register Books</a>
+          
           <a class="dropdown-item" href="{% url 'library:borrow-books' %}">Issue Books</a>
+         
+          {% else %}
+          <a class="dropdown-item" href="{% url 'library:book-list' %}">View Books</a>
+
+          {% endif %}
+            
+          
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#">Separated link</a>
         </div>
@@ -43,7 +53,8 @@
         </div>
       </li>
 
-
+      
+      {% if request.user.is_staff %}
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><b>Fine Calculation</b></a>
         <div class="dropdown-menu">
@@ -53,6 +64,9 @@
          
         </div>
       </li>
+      {% endif %}
+        
+      
      
     </ul>
 

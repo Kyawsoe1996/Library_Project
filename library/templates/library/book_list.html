@@ -22,7 +22,12 @@ Book Registration
                 <th>Published Date</th>
                 <th>Author</th>
                 <th>Image</th>
+                
+                {% if request.user.is_staff %}
                 <th>Operation</th>
+                {% endif %}
+                    
+                
                 <th>On Hand Qty</th>
                 <th>Aval Qty</th>
 
@@ -42,8 +47,14 @@ Book Registration
                 <td>{{b.published_date |date:"d-M-Y"}}</td>
                 <td>{{b.author.author_name}}</td>
                 <td> <img src="{{b.image.url}}" width="80px" alt="Generic placeholder image" class="img-fluid"></td>
+                
+                
+                {% if request.user.is_staff %}
                 <td><a href="{% url 'library:book-update' b.id %}">Edit</a> 
                     <a href="{% url 'library:book-delete' b.id %}">Delete</a></td>
+                {% endif %}
+                    
+                
                 <td>{{ b.stocks.all.0.quantity}}</td>
                 <td>{{b.stocks.all.0.avail_qty}}</td>
             </tr>

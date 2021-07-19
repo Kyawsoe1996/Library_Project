@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.http import HttpResponse,JsonResponse
 from account.models import Account
-from library.models import Book,Author,Stock
+from library.models import Book,Author,Stock,Borrow
 
 #Validator Rest Framework, phone_number validate on Account Serializer
 from rest_framework.validators import UniqueValidator
@@ -27,6 +27,12 @@ class StockSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Stock
+        fields = '__all__'
+
+class BorrowSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model  = Borrow
         fields = '__all__'
 
   

@@ -9,6 +9,8 @@ from .views import (
     ReturnBook,
 )
 
+from django.contrib.auth.decorators import login_required
+
 
 
 
@@ -24,7 +26,7 @@ urlpatterns = [
     path('borrow-book/',BorrowBooks,name="borrow-books"),
 
     #Issue Book
-    path('view-issue-book/',ViewIssueBook.as_view(),name="view-issue-book"),
+    path('view-issue-book/',login_required(ViewIssueBook.as_view()),name="view-issue-book"),
 
     #Return Book
     path('return-book/<int:id>/',ReturnBook,name="return-book")
