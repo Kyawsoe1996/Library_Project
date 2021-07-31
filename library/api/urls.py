@@ -10,6 +10,7 @@ from .views import (
     BorrowViewSet,
     BorrowBookViewSet,
     IssueBook,
+    ViewIssueBook,
     )
 
 
@@ -20,7 +21,11 @@ app_name = "library"
 #router.register(r'api/authors', AuthorViewSet, basename='author')
 
 urlpatterns = [
-    path('issue-book',IssueBook,name="ib")
+    path('issue-book',IssueBook,name="ib"),
+    # path('v-i-b/',ViewIssueBook.as_view()),name="v_i_b")
+    path('v-i-b/',ViewIssueBook.as_view({'get':'list'}),name="ib"),
+
+
     
 ]
 router.register(r'books', BookViewSet, basename='book')
@@ -28,6 +33,9 @@ router.register(r'authors', AuthorViewSet, basename='author'),
 router.register(r'stocks', StockViewSet, basename='stock'),
 router.register(r'borrow',BorrowViewSet,basename="borrow"),
 router.register(r'borrow-book',BorrowBookViewSet,basename="borrow-books")
+# router.register(r'v-i-b',ViewIssueBook,basename="v_i_b")
+
+
 
 
 

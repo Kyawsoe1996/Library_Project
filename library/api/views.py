@@ -46,7 +46,8 @@ from .serializers import (
     StockSerializer,
     BorrowSerializer,
     BorrowBookSerializer,
-    IssueBookSerializer
+    IssueBookSerializer,
+    ViewIssueBookSerializer
 )
 
 
@@ -166,7 +167,8 @@ def IssueBook(request):
                             if data in borrow_qs.books.all():
                                 # messages.info(request," Book -  %s  already booked" %data.book_id.name)
                                 name = "Already Booked for this  %s" % data.book_id.name
-                                return JsonResponse({"data":name})
+                                raise serializers.ValidationError({'error':name})
+
 
             #if there is no duplicate book,  then create another borrow_obj
             overall_method(borrow_book_lists,user,borrow_date)
@@ -179,6 +181,25 @@ def IssueBook(request):
         
 
         return JsonResponse({"success":"Successfully Booked"})
+
+
+class ViewIssueBook(viewsets.ModelViewSet):
+    queryset = Borrow.objects.all()
+    serializer_class = ViewIssueBookSerializer
+
+
+    def get_queryset(self):
+        account = Account.objects.get(user=self.request.user)
+        queryset =  super().get_queryset()
+        if self.request.user.is_superuser:
+            for i in queryset:
+                print(i,"$$$$$$$$$$$$$$44")
+            return queryset
+        borrow_qs_all = queryset.filter(borrow_status=True,user=account).order_by('borrow_date')
+        # # print("queryset")
+        # account = Account.objects.get(user=self.request.user)
+        # queryset = queryset.filter(user=account)
+        return borrow_qs_all
     
 
 
@@ -191,11 +212,4 @@ def IssueBook(request):
 
 
 
-        # serializer = IssueBookSerializer(data=data)
-        # if serializer.is_valid():
-        #     serializer.save()
-        #     return JsonResponse(serializer.data, status=201)
-        # return JsonResponse(serializer.errors, status=400)
-    #return JsonResponse({"data":"Not a POST REQUEST"})
-
-
+      
