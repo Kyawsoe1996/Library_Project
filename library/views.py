@@ -155,8 +155,15 @@ class ViewIssueBook(View):
          messages.info(self.request, "You need to login")
          return redirect("account:login")
       user = self.request.user
-      account = Account.objects.get(user=user)
-      borrow_qs_all = Borrow.objects.filter(user=account,borrow_status=True).order_by('borrow_date')
+      if user.is_superuser:
+         borrow_qs_all = Borrow.objects.filter(borrow_status=True).order_by('borrow_date')
+         # context ={
+         # "borrow_qs_all":borrow_qs_all
+         # } 
+      else:
+
+         account = Account.objects.get(user=user)
+         borrow_qs_all = Borrow.objects.filter(user=account,borrow_status=True).order_by('borrow_date')
        #by_date
       context ={
          "borrow_qs_all":borrow_qs_all
